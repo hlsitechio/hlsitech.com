@@ -19,7 +19,7 @@ export const ContactCard: React.FC = () => {
     useLanguage();
   const prefersReducedMotion = useReducedMotion();
   const [showQR, setShowQR] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(false); // Keeping this state for future use
 
   if (showChat) {
     return (
@@ -86,14 +86,13 @@ export const ContactCard: React.FC = () => {
               phone={config.phone}
               t={t}
               isTransitioning={isTransitioning}
-            />
-
-            <SocialLinks
-              links={config.social}
-              isDark={isDark}
-              t={t}
-              isTransitioning={isTransitioning}
-              onChatOpen={() => setShowChat(true)}
+              onGoogleMeetClick={() =>
+                window.open(
+                  "https://chat.google.com/room/AAAAE2Ji8To?cls=7",
+                  "_blank",
+                  "noopener,noreferrer",
+                )
+              }
             />
           </div>
 
