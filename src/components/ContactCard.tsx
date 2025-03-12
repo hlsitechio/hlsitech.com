@@ -1,28 +1,35 @@
-import { useState } from 'react';
-import { ContactButtons } from './ContactButtons';
-import { ProfileHeader } from './ProfileHeader';
-import { SocialLinks } from './SocialLinks';
-import { ShareButtons } from './ShareButtons';
-import { QRCode } from './QRCode';
-import { ThemeToggle } from './ThemeToggle';
-import { LanguageToggle } from './LanguageToggle';
-import { ChatInterface } from './ChatInterface';
-import { useLanguage } from '../hooks/useLanguage';
-import { config } from '../config';
+import { useState } from "react";
+import { ContactButtons } from "./ContactButtons";
+import { ProfileHeader } from "./ProfileHeader";
+import { SocialLinks } from "./SocialLinks";
+import { ShareButtons } from "./ShareButtons";
+import { QRCode } from "./QRCode";
+import { ThemeToggle } from "./ThemeToggle";
+import { LanguageToggle } from "./LanguageToggle";
+import { OrientationToggle } from "./OrientationToggle";
+import { ChatInterface } from "./ChatInterface";
+import { useLanguage } from "../hooks/useLanguage";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import { config } from "../config";
 
 export const ContactCard: React.FC = () => {
   const [isDark, setIsDark] = useState(false);
-  const { language, toggleLanguage, isTransitioning, direction, t } = useLanguage();
+  const [isLandscape, setIsLandscape] = useState(false);
+  const { language, toggleLanguage, isTransitioning, direction, t } =
+    useLanguage();
+  const prefersReducedMotion = useReducedMotion();
   const [showQR, setShowQR] = useState(false);
   const [showChat, setShowChat] = useState(false);
 
   if (showChat) {
     return (
-      <div className={`max-w-md w-full mx-auto overflow-hidden rounded-2xl border-2 ${
-        isDark 
-          ? 'bg-gradient-to-b from-gray-900 to-gray-800 border-gray-700' 
-          : 'bg-gradient-to-b from-blue-50/50 to-white border-black'
-      }`}>
+      <div
+        className={`max-w-md w-full mx-auto overflow-hidden rounded-2xl border-2 shadow-2xl ${
+          isDark
+            ? "bg-gradient-to-b from-gray-900 to-gray-800 border-gray-700"
+            : "bg-gradient-to-b from-blue-50/90 to-white border-blue-200"
+        }`}
+      >
         <ChatInterface
           isOpen={true}
           onClose={() => setShowChat(false)}
@@ -35,11 +42,13 @@ export const ContactCard: React.FC = () => {
   }
 
   return (
-    <div className={`max-w-md w-full mx-auto overflow-hidden rounded-2xl border-2 ${
-      isDark 
-        ? 'bg-gradient-to-b from-gray-900 to-gray-800 border-gray-700' 
-        : 'bg-gradient-to-b from-blue-50/50 to-white border-black'
-    }`}>
+    <div
+      className={`${isLandscape ? "max-w-2xl" : "max-w-md"} w-full mx-auto overflow-hidden rounded-2xl border-2 shadow-2xl transition-all duration-300 transform hover:scale-[1.01] ${
+        isDark
+          ? "bg-gradient-to-b from-gray-900 to-gray-800 border-gray-700"
+          : "bg-gradient-to-b from-blue-50/90 to-white border-blue-200"
+      }`}
+    >
       <div className="relative">
         <ProfileHeader
           profileImage={config.images.profile}
@@ -55,42 +64,53 @@ export const ContactCard: React.FC = () => {
           direction={direction}
         />
         <div className="absolute top-4 right-4 flex gap-2">
-          <LanguageToggle 
+          <LanguageToggle
             language={language}
             onToggle={toggleLanguage}
             isDark={isDark}
           />
           <ThemeToggle isDark={isDark} onToggle={() => setIsDark(!isDark)} />
+          <OrientationToggle
+            isLandscape={isLandscape}
+            onToggle={() => setIsLandscape(!isLandscape)}
+            isDark={isDark}
+          />
         </div>
       </div>
-      
+
       <div className="p-8">
-        <ContactButtons 
-          email={config.email} 
-          phone={config.phone}
-          t={t}
-          isTransitioning={isTransitioning}
-        />
-        
-        <SocialLinks 
-          links={config.social}
-          isDark={isDark}
-          t={t}
-          isTransitioning={isTransitioning}
-          onChatOpen={() => setShowChat(true)}
-        />
-        
-        <ShareButtons 
-          name={t.name}
-          title={t.title}
-          onShowQR={() => setShowQR(true)}
-          isDark={isDark}
-          t={t}
-          isTransitioning={isTransitioning}
-        />
+        <div className={`${isLandscape ? "flex gap-6" : "block"}`}>
+          <div className={`${isLandscape ? "w-1/2" : "w-full"}`}>
+            <ContactButtons
+              email={config.email}
+              phone={config.phone}
+              t={t}
+              isTransitioning={isTransitioning}
+            />
+
+            <SocialLinks
+              links={config.social}
+              isDark={isDark}
+              t={t}
+              isTransitioning={isTransitioning}
+              onChatOpen={() => setShowChat(true)}
+            />
+          </div>
+
+          <div className={`${isLandscape ? "w-1/2" : "w-full"}`}>
+            <ShareButtons
+              name={t.name}
+              title={t.title}
+              onShowQR={() => setShowQR(true)}
+              isDark={isDark}
+              t={t}
+              isTransitioning={isTransitioning}
+            />
+          </div>
+        </div>
       </div>
 
-      <QRCode 
+      <QRCode
         isOpen={showQR}
         onClose={() => setShowQR(false)}
         profile={config}

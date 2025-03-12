@@ -1,6 +1,7 @@
-import React from 'react';
-import { X, ArrowLeft, Lock } from 'lucide-react';
-import { Translation } from '../../config/i18n';
+import React from "react";
+import { IoCloseCircle } from "react-icons/io5";
+import { FaArrowLeft, FaLock } from "react-icons/fa";
+import { Translation } from "../../config/i18n";
 
 interface ChatHeaderProps {
   onClose: () => void;
@@ -10,15 +11,15 @@ interface ChatHeaderProps {
   t: Translation;
 }
 
-export const ChatHeader: React.FC<ChatHeaderProps> = ({ 
-  onClose, 
+export const ChatHeader: React.FC<ChatHeaderProps> = ({
+  onClose,
   isDark,
   isEmbedded = false,
   isAdmin = false,
-  t
+  t,
 }) => {
   return (
-    <div className={`p-4 ${isDark ? 'bg-gray-700' : 'bg-blue-600'}`}>
+    <div className={`p-4 ${isDark ? "bg-gray-700" : "bg-blue-600"}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {isEmbedded && (
@@ -26,15 +27,17 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
               onClick={onClose}
               className="text-white/80 hover:text-white transition-colors"
             >
-              <ArrowLeft size={20} />
+              <FaArrowLeft size={20} className="text-blue-200" />
             </button>
           )}
           <div className="flex items-center gap-2">
             <h3 className="text-white font-semibold">{t.chat.title}</h3>
             {isAdmin && (
               <div className="flex items-center gap-1">
-                <Lock size={14} className="text-white/90" />
-                <span className="text-xs text-white/90">{t.chat.adminMode}</span>
+                <FaLock size={14} className="text-yellow-300" />
+                <span className="text-xs text-white/90">
+                  {t.chat.adminMode}
+                </span>
               </div>
             )}
             <div className="flex items-center gap-1.5">
@@ -48,7 +51,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({
             onClick={onClose}
             className="text-white/80 hover:text-white transition-colors"
           >
-            <X size={20} />
+            <IoCloseCircle size={22} className="text-red-300" />
           </button>
         )}
       </div>
